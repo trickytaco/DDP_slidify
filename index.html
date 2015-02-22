@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Coordinate Converter</title>
+  <meta charset="utf-8">
+  <meta name="description" content="Coordinate Converter">
+  <meta name="author" content="trickytaco">
+  <meta name="generator" content="slidify" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/default.css" media="all" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/phone.css" 
+    media="only screen and (max-device-width: 480px)" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/slidify.css" >
+  <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/tomorrow.css" />
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->  <link rel=stylesheet href="./assets/css/ribbons.css"></link>
+
+  
+  <!-- Grab CDN jQuery, fall back to local if offline -->
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+  <script>window.jQuery || document.write('<script src="libraries/widgets/quiz/js/jquery.js"><\/script>')</script> 
+  <script data-main="libraries/frameworks/io2012/js/slides" 
+    src="libraries/frameworks/io2012/js/require-1.0.8.min.js">
+  </script>
+  
+  
+
+</head>
+<body style="opacity: 0">
+  <slides class="layout-widescreen">
+    
+    <!-- LOGO SLIDE -->
+        <slide class="title-slide segue nobackground">
+  <hgroup class="auto-fadein">
+    <h1>Coordinate Converter</h1>
+    <h2>Converting Your Coordinates</h2>
+    <p>trickytaco<br/></p>
+  </hgroup>
+  <article></article>  
+</slide>
+    
+
+    <!-- SLIDES -->
+    <slide class="" id="slide-1" style="background:;">
+  <hgroup>
+    <h2>Coordinate Conversion</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Geographic coordinates come in many varieties.  Two of the most common are Degrees-Minutes-Seconds (DDDMMSS) and Decimal Degrees (DD.DDDDD).  Some software packages will only accept one or the other for processing, potentially requiring conversion.  This tool quickly converts coordinates from one format to the other.</p>
+
+<p>Degrees-Minutes-Seconds (DDDMMSS)</p>
+
+<p>The coordinate &quot;0862345&quot; means 86 degrees, 23 minutes, 45 seconds.  There are 60 seconds to a minute and 60 minutes to a degree.  Note that the minutes contain a leading zero(es) in order to keep the coordinate as seven characters.</p>
+
+<p>Decimal Degrees (DD.DDDDD)</p>
+
+<p>The coordinate &quot;82.91876&quot; refers to 82 degrees and 91876/100000ths of a degree.</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="class" id="id" style="background:;">
+  <hgroup>
+    <h2>Conversion from DDDMMSS to DD</h2>
+  </hgroup>
+  <article data-timings="">
+    <ol>
+<li>The first three characters make up the whole number part of the DD coordinate.</li>
+<li>Extract the fourth and fifth characters and divide that two-digit number by 60.</li>
+<li>Extract the sixth and seventh characters and divide that two-digit number by 3600.</li>
+</ol>
+
+<pre><code class="r">inCoord &lt;- &quot;1203000&quot;
+degrees &lt;- as.numeric(substr(inCoord,1,3))
+minutes &lt;- as.numeric(substr(inCoord,4,5))/60
+seconds &lt;- as.numeric(substr(inCoord,6,7))/3600
+degrees + minutes + seconds
+</code></pre>
+
+<pre><code>## [1] 120.5
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="class" id="id" style="background:;">
+  <hgroup>
+    <h2>Conversion from DD to DDDMMSS</h2>
+  </hgroup>
+  <article data-timings="">
+    <ol>
+<li>Degrees: Take the whole number part of the DD coordinates.</li>
+<li>Minutes: Multiply the DD coordinate by 60, take the whole number part of the result, and take modulo 60.</li>
+<li>Seconds: Multiply the DD coordinate by 3600, take the whole number part of the result, and take modulo 3600.  Drop any remaining decimals.</li>
+</ol>
+
+<pre><code class="r">inCoord &lt;- 50.5023
+degrees &lt;- as.character(trunc(inCoord))
+minutes &lt;- as.character(trunc(inCoord * 60) %% 60)
+seconds &lt;- as.character(round((inCoord * 3600) %% 60,0))
+</code></pre>
+
+<pre><code class="r">paste(degrees,minutes,seconds,sep=&quot;&quot;)
+</code></pre>
+
+<pre><code>## [1] &quot;0503008&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="class" id="id" style="background:;">
+  <hgroup>
+    <h2>Using the Coordinate Converter</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Tool URL: <a href="http://trickytaco.shinyapps.io/CoordConverter">http://trickytaco.shinyapps.io/CoordConverter</a></p>
+
+<p>The tool accepts either input format.  Use the radio buttons below the text input box to choose which type of conversion (DDDMMSS to DD or DD to DDDMMSS) to perform.  Currently, the tool does not allow the user to specify a hemisphere and does not accept negative DD coordinates.  If the user enters an invalid coordinate, the tool returns a NA value.</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+    <slide class="backdrop"></slide>
+  </slides>
+  <div class="pagination pagination-small" id='io2012-ptoc' style="display:none;">
+    <ul>
+      <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=1 title='Coordinate Conversion'>
+         1
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=2 title='Conversion from DDDMMSS to DD'>
+         2
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=3 title='Conversion from DD to DDDMMSS'>
+         3
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=4 title='Using the Coordinate Converter'>
+         4
+      </a>
+    </li>
+  </ul>
+  </div>  <!--[if IE]>
+    <script 
+      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">  
+    </script>
+    <script>CFInstall.check({mode: 'overlay'});</script>
+  <![endif]-->
+</body>
+  <!-- Load Javascripts for Widgets -->
+  
+  <!-- LOAD HIGHLIGHTER JS FILES -->
+  <script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <!-- DONE LOADING HIGHLIGHTER JS FILES -->
+   
+  </html>

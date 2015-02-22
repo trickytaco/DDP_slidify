@@ -1,0 +1,80 @@
+---
+title       : Coordinate Converter
+subtitle    : Converting Your Coordinates
+author      : trickytaco
+job         : 
+framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : tomorrow      # 
+widgets     : []            # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {standalone, draft}
+knit        : slidify::knit2slides
+---
+
+## Coordinate Conversion
+
+Geographic coordinates come in many varieties.  Two of the most common are Degrees-Minutes-Seconds (DDDMMSS) and Decimal Degrees (DD.DDDDD).  Some software packages will only accept one or the other for processing, potentially requiring conversion.  This tool quickly converts coordinates from one format to the other.
+
+Degrees-Minutes-Seconds (DDDMMSS)
+
+The coordinate "0862345" means 86 degrees, 23 minutes, 45 seconds.  There are 60 seconds to a minute and 60 minutes to a degree.  Note that the minutes contain a leading zero(es) in order to keep the coordinate as seven characters.
+
+Decimal Degrees (DD.DDDDD)
+
+The coordinate "82.91876" refers to 82 degrees and 91876/100000ths of a degree.
+
+--- .class #id
+
+## Conversion from DDDMMSS to DD
+
+1. The first three characters make up the whole number part of the DD coordinate.
+2. Extract the fourth and fifth characters and divide that two-digit number by 60.
+3. Extract the sixth and seventh characters and divide that two-digit number by 3600.
+
+
+```r
+inCoord <- "1203000"
+degrees <- as.numeric(substr(inCoord,1,3))
+minutes <- as.numeric(substr(inCoord,4,5))/60
+seconds <- as.numeric(substr(inCoord,6,7))/3600
+degrees + minutes + seconds
+```
+
+```
+## [1] 120.5
+```
+
+--- .class #id
+
+## Conversion from DD to DDDMMSS
+
+1. Degrees: Take the whole number part of the DD coordinates.
+2. Minutes: Multiply the DD coordinate by 60, take the whole number part of the result, and take modulo 60.
+3. Seconds: Multiply the DD coordinate by 3600, take the whole number part of the result, and take modulo 3600.  Drop any remaining decimals.
+
+
+```r
+inCoord <- 50.5023
+degrees <- as.character(trunc(inCoord))
+minutes <- as.character(trunc(inCoord * 60) %% 60)
+seconds <- as.character(round((inCoord * 3600) %% 60,0))
+```
+
+
+```r
+paste(degrees,minutes,seconds,sep="")
+```
+
+```
+## [1] "0503008"
+```
+
+--- .class #id
+
+## Using the Coordinate Converter
+
+Tool URL: http://trickytaco.shinyapps.io/CoordConverter
+
+The tool accepts either input format.  Use the radio buttons below the text input box to choose which type of conversion (DDDMMSS to DD or DD to DDDMMSS) to perform.  Currently, the tool does not allow the user to specify a hemisphere and does not accept negative DD coordinates.  If the user enters an invalid coordinate, the tool returns a NA value.
+
+
